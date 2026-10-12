@@ -19,18 +19,38 @@ async function loadTasks() {
   statusMessage.textContent = "";
 }
 
+function createTaskElement(task) {
+  const item = document.createElement("div");
+  item.classList.add("task");
+  item.dataset.id = task.id;
+
+  if (task.completed) {
+    item.classList.add("completed");
+  }
+
+  const title = document.createElement("span");
+  title.textContent = task.title;
+
+  const toggleBtn = document.createElement("button");
+  toggleBtn.textContent = "Toggle";
+  toggleBtn.dataset.action = "toggle";
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.dataset.action = "delete";
+
+  item.appendChild(title);
+  item.appendChild(toggleBtn);
+  item.appendChild(deleteBtn);
+
+  return item;
+}
+
 function renderTasks() {
   taskList.textContent = "";
 
   manager.tasks.forEach(task => {
-    const item = document.createElement("div");
-    item.classList.add("task");
-
-    const title = document.createElement("span");
-    title.textContent = task.title;
-
-    item.appendChild(title);
-    taskList.appendChild(item);
+    taskList.appendChild(createTaskElement(task));
   });
 }
 
