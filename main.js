@@ -54,4 +54,21 @@ function renderTasks() {
   });
 }
 
+taskList.addEventListener("click", event => {
+  const button = event.target.closest("button");
+  if (!button) {
+    return;
+  }
+
+  const taskId = Number(button.closest(".task").dataset.id);
+
+  if (button.dataset.action === "toggle") {
+    manager.toggleTask(taskId);
+  } else if (button.dataset.action === "delete") {
+    manager.removeTask(taskId);
+  }
+
+  renderTasks();
+});
+
 loadTasksBtn.addEventListener("click", loadTasks);
