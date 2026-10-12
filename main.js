@@ -6,17 +6,24 @@ const statusMessage = document.getElementById("statusMessage");
 
 async function loadTasks() {
   statusMessage.textContent = "Loading tasks...";
+  loadTasksBtn.disabled = true;
 
-  const rawTasks = await fetchTasks();
+  try {
+    const rawTasks = await fetchTasks();
 
-  const json = JSON.stringify(rawTasks);
-  const parsed = JSON.parse(json);
-  const tasks = parsed.map(item => new Task(item.id, item.title, item.completed));
+    const json = JSON.stringify(rawTasks);
+    const parsed = JSON.parse(json);
+    const tasks = parsed.map(item => new Task(item.id, item.title, item.completed));
 
-  manager.setTasks(tasks);
-  renderTasks();
+    manager.setTasks(tasks);
+    renderTasks();
 
-  statusMessage.textContent = "";
+    statusMessage.textContent = "";
+  } catch (error) {
+    statusMessage.textContent = "Could not load tasks: " + error.message;
+  } finally {
+    loadTasksBtn.disabled = false;
+  }
 }
 
 function createTaskElement(task) {
